@@ -1,0 +1,16 @@
+﻿---
+BasedOnStyle: Microsoft
+AccessModifierOffset: -4
+AlignEscapedNewlines: Left
+AlwaysBreakTemplateDeclarations: 'Yes'
+BreakBeforeBraces: Allman
+BreakConstructorInitializers: BeforeComma
+BreakInheritanceList: BeforeComma
+IndentPPDirectives: AfterHash
+NamespaceIndentation: All
+PointerAlignment: Left
+SortUsingDeclarations: 'true'
+SpaceAfterTemplateKeyword: 'false'
+SpaceBeforeCpp11BracedList: 'true'
+
+...

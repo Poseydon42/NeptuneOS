@@ -1,0 +1,5 @@
+.idea/
+Build/
+Toolchain/Cross/
+Tests/googletest
+
