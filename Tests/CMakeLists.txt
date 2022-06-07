@@ -4,9 +4,14 @@ project(Tests CXX)
 
 set(SOURCES
 	main.cpp
+	Common/Templates/TestTypedTransfer.cpp
 	Common/Templates/TestTypeTraits.cpp
 	Common/Utils/TestMemory.cpp
 )
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+set(CMAKE_CXX_EXTENSIONS FALSE)
 
 add_subdirectory(googletest)
 
