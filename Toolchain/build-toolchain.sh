@@ -43,9 +43,11 @@ patch GCCSource/gcc/config.gcc $SCRIPT_LOCATION/config.gcc.patch
 
 mkdir -p GCCBuild
 cd GCCBuild
-../GCCSource/configure --target=$TARGET --prefix="$PREFIX" --disable-nls --enable-languages=c,c++ --without-headers
+../GCCSource/configure --target=$TARGET --prefix="$PREFIX" --disable-nls --enable-languages=c,c++ --without-headers -disable-libssp -with-dwarf2 -with-newlib --disable-__cxa_atexit --disable-threads --disable-shared --disable-sjlj-exceptions --enable-libstdcxx --disable-hosted-libstdcxx --disable-bootstrap
 make all-gcc
 make all-target-libgcc
 make install-gcc
 make install-target-libgcc
+make all-target-libstdc++-v3
+make install-target-libstdc++-v3
 
