@@ -4,6 +4,7 @@ project(Tests CXX)
 
 set(SOURCES
 	main.cpp
+	Common/Containers/TestVector.cpp
 	Common/Templates/TestTypedTransfer.cpp
 	Common/Templates/TestTypeTraits.cpp
 	Common/Utils/TestMemory.cpp
