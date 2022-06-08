@@ -25,4 +25,9 @@ TEST(Vector, Basic)
     EXPECT_EQ(*First.Data(), 1);
     First.Data()[2] = 3;
     EXPECT_EQ(First[2], 3);
+
+    Second.PushBack(44);
+    EXPECT_TRUE(Second.Capacity() >= 5);
+    EXPECT_EQ(Second.Size(), 5);
+    EXPECT_EQ(Second[4], 44);
 }

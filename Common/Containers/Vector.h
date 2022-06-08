@@ -31,10 +31,13 @@ namespace Common
         T* Data();
 
         void Resize(size_t Size, T Element = T {});
-        void Reserve(size_t Size);
+        void Reserve(size_t NewCapacity);
 
         [[nodiscard]] size_t Size() const;
         [[nodiscard]] size_t Capacity() const;
+
+        void PushBack(const T& Element);
+        void PushBack(T&& Element);
 
     private:
         T* m_Data = nullptr;
@@ -90,6 +93,8 @@ namespace Common
         Swap(m_Data, Other.m_Data);
         Swap(m_Size, Other.m_Size);
         Swap(m_Capacity, Other.m_Capacity);
+
+        return *this;
     }
 
     template<typename T>
@@ -148,16 +153,17 @@ namespace Common
     }
 
     template<typename T>
-    void Vector<T>::Reserve(size_t Size)
+    void Vector<T>::Reserve(size_t NewCapacity)
     {
-        if (Size <= m_Capacity)
+        if (NewCapacity <= m_Capacity)
             return;
 
-        auto* NewStorage = new T[Size];
+        auto* NewStorage = new T[NewCapacity];
         TypedTransfer<T>::Copy(NewStorage, m_Data, m_Size);
 
         delete[] m_Data;
         m_Data = NewStorage;
+        m_Capacity = NewCapacity;
     }
 
     template<typename T>
@@ -170,5 +176,21 @@ namespace Common
     size_t Vector<T>::Capacity() const
     {
         return m_Capacity;
+    }
+
+    template<typename T>
+    void Vector<T>::PushBack(const T& Element)
+    {
+        Reserve(m_Size + 1);
+        m_Data[m_Size] = Element;
+        m_Size++;
+    }
+
+    template<typename T>
+    void Vector<T>::PushBack(T&& Element)
+    {
+        Reserve(m_Size + 1);
+        m_Data[m_Size] = Move(Element);
+        m_Size++;
     }
 } // namespace Common
