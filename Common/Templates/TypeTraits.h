@@ -42,4 +42,7 @@ namespace Common
 
 	template<typename T>
 	inline constexpr bool IsIntegral = IsIntegralImpl<typename RemoveCV<T>::Type>::Value;
+
+    template<typename T>
+    concept Integral = IsIntegral<T>;
 }
