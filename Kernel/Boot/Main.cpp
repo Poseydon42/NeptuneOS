@@ -13,6 +13,8 @@ extern "C" [[maybe_unused]] void KernelMain(const void* MultibootInfoPtr, uint32
     Console::Initialize();
     Console::Out() << "Kernel loaded... Printing from KernelMain()\n";
 
+    KMallocInitialize();
+
     auto MultibootInfo = reinterpret_cast<multiboot_info_t*>(P2V(MultibootInfoPtr));
     if (MultibootMagic != MULTIBOOT_BOOTLOADER_MAGIC)
     {
@@ -34,6 +36,4 @@ extern "C" [[maybe_unused]] void KernelMain(const void* MultibootInfoPtr, uint32
     }
 
     Console::Out() << "PML4T physical address: " << PML4T << '\n';
-
-    KMallocInitialize();
 }
