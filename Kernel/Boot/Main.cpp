@@ -1,9 +1,9 @@
-#include <stdint.h>
-
-#include <Arch/BootMemory.h>
+#include <Arch/Memory.h>
 #include <Boot/Multiboot.h>
+#include <Containers/Vector.h>
 #include <IO/Console.h>
 #include <Memory/KMalloc.h>
+#include <Memory/PhysicalPageManager.h>
 #include <Panic.h>
 
 using namespace Kernel;
@@ -22,6 +22,7 @@ extern "C" [[maybe_unused]] void KernelMain(const void* MultibootInfoPtr, uint32
     {
         KernelPanic("No valid memory map given by bootloader");
     }
+
 
     for (const auto* Entry = reinterpret_cast<const multiboot_mmap_entry*>(P2V(MultibootInfo->mmap_addr));
          reinterpret_cast<size_t>(Entry) < P2V(MultibootInfo->mmap_addr) + MultibootInfo->mmap_length;

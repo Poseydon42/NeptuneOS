@@ -1,6 +1,6 @@
 #include "Console.h"
 
-#include <Arch/BootMemory.h>
+#include <Arch/Memory.h>
 #include <IO/Serial.h>
 #include <Utils/Memory.h>
 
