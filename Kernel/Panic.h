@@ -2,5 +2,5 @@
 
 namespace Kernel
 {
-    void KernelPanic(const char* Message);
+    [[noreturn]] void KernelPanic(const char* Message);
 }

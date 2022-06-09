@@ -4,9 +4,9 @@
 
 namespace Kernel
 {
-    void KernelPanic(const char* Message)
+    [[noreturn]] void KernelPanic(const char* Message)
     {
         Console::Out() << "KERNEL PANIC: " << Message;
-        while (1);
+        while (true);
     }
 }
