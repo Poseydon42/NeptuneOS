@@ -3,7 +3,7 @@
 #include <Containers/Vector.h>
 #include <IO/Console.h>
 #include <Memory/KMalloc.h>
-#include <Memory/PhysicalPageManager.h>
+#include <Memory/PhysicalMemoryManager.h>
 #include <Panic.h>
 
 using namespace Kernel;
@@ -38,5 +38,5 @@ extern "C" [[maybe_unused]] void KernelMain(const void* MultibootInfoPtr, uint32
     }
 
     Console::Out() << "PML4T physical address: " << PML4T << '\n';
-    PhysicalPageManager::Initialize(PageRanges, reinterpret_cast<PhysicalAddress>(PML4T));
+    PhysicalMemoryManager::Initialize(PageRanges, reinterpret_cast<PhysicalAddress>(PML4T));
 }

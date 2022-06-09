@@ -1,4 +1,4 @@
-#include "PhysicalPageManager.h"
+#include "PhysicalMemoryManager.h"
 
 #include <Arch/Memory.h>
 #include <Math/Bits.h>
@@ -10,10 +10,10 @@
 #pragma ide diagnostic ignored "EndlessLoop"
 namespace Kernel
 {
-    PhysicalPageManager::PageRange* PhysicalPageManager::s_FirstPageRange;
-    PhysicalAddress PhysicalPageManager::s_PML4TAddress;
+    PhysicalMemoryManager::PageRange* PhysicalMemoryManager::s_FirstPageRange;
+    PhysicalAddress PhysicalMemoryManager::s_PML4TAddress;
 
-    void PhysicalPageManager::Initialize(const Common::Vector<PhysicalPageRange>& Pages, PhysicalAddress PML4TAddress)
+    void PhysicalMemoryManager::Initialize(const Common::Vector<PhysicalPageRange>& Pages, PhysicalAddress PML4TAddress)
     {
         s_PML4TAddress = PML4TAddress;
         s_FirstPageRange = new PageRange[Pages.Size()];
@@ -51,7 +51,7 @@ namespace Kernel
             SetIsPageUsed(KernelPageAddress, true);
     }
 
-    bool PhysicalPageManager::IsPageUsed(PhysicalAddress Address)
+    bool PhysicalMemoryManager::IsPageUsed(PhysicalAddress Address)
     {
         PageRange* Current = s_FirstPageRange;
         while (Current)
@@ -72,7 +72,7 @@ namespace Kernel
         return false;
     }
 
-    void PhysicalPageManager::SetIsPageUsed(PhysicalAddress Address, bool IsUsed)
+    void PhysicalMemoryManager::SetIsPageUsed(PhysicalAddress Address, bool IsUsed)
     {
         PageRange* Current = s_FirstPageRange;
         while (Current)
@@ -98,7 +98,7 @@ namespace Kernel
         KernelPanic("Invalid page address");
     }
 
-    PhysicalAddress PhysicalPageManager::AllocatePage()
+    PhysicalAddress PhysicalMemoryManager::AllocatePage()
     {
         auto* Current = s_FirstPageRange;
         while (Current)

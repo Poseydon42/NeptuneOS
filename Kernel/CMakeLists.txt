@@ -31,7 +31,7 @@ set(CXX_SOURCES
 	IO/Serial.cpp
 	IO/Console.cpp
 	Memory/KMalloc.cpp
-	Memory/PhysicalPageManager.cpp
+	Memory/PhysicalMemoryManager.cpp
 	Panic.cpp
 )
 

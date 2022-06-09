@@ -11,7 +11,7 @@ namespace Kernel
         PhysicalSize Size;
     };
 
-    class PhysicalPageManager
+    class PhysicalMemoryManager
     {
     public:
         static void Initialize(const Common::Vector<PhysicalPageRange>& Pages, PhysicalAddress PML4TAddress);
