@@ -17,6 +17,7 @@ namespace Kernel
         static void Initialize(const Common::Vector<PhysicalPageRange>& Pages, PhysicalAddress PML4TAddress);
 
         static PhysicalAddress AllocatePage();
+        static void FreePage(PhysicalAddress Address);
 
     private:
         struct PageRange
@@ -34,6 +35,8 @@ namespace Kernel
 
         static PageRange* s_FirstPageRange;
         static PhysicalAddress s_PML4TAddress;
+
+        static bool GetPageAddressInBitmap(PhysicalAddress Address, PageRange*& Range, size_t& Entry, uint32_t& BitIndex);
 
         static bool IsPageUsed(PhysicalAddress Address);
         static void SetIsPageUsed(PhysicalAddress Address, bool IsUsed);

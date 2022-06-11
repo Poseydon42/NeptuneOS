@@ -1,6 +1,7 @@
 #include "PhysicalMemoryManager.h"
 
 #include <Arch/Memory.h>
+#include <Assert.h>
 #include <Math/Bits.h>
 #include <Memory/KMalloc.h>
 #include <Panic.h>
@@ -51,51 +52,51 @@ namespace Kernel
             SetIsPageUsed(KernelPageAddress, true);
     }
 
-    bool PhysicalMemoryManager::IsPageUsed(PhysicalAddress Address)
+    bool PhysicalMemoryManager::GetPageAddressInBitmap(PhysicalAddress Address, PageRange*& Range, size_t& Entry,
+                                                       uint32_t& BitIndex)
     {
-        PageRange* Current = s_FirstPageRange;
+        auto* Current = s_FirstPageRange;
         while (Current)
         {
-            if (Current->Address <= Address && Current->Address + Current->Size >= Address)
+            if (Current->Address <= Address && Current->Address + Current->Size > Address)
             {
-                const auto BitsPerSingleBitmapElement = sizeof(PageRange::BitmapEntryType) * 8;
-
                 auto PageOffset = (Address - Current->Address) / PAGE_SIZE;
-                auto BitmapElementIndex = PageOffset / BitsPerSingleBitmapElement;
-                auto BitmapBitIndex = BitsPerSingleBitmapElement - 1 - PageOffset % BitsPerSingleBitmapElement;
+                auto BitmapElementIndex = PageOffset / PageRange::PagesPerBitmapEntry;
 
-                return ((Current->BitmapPtr[BitmapElementIndex] & (1 << BitmapBitIndex)) != 0);
+                Range = Current;
+                Entry = BitmapElementIndex;
+                BitIndex = PageRange::PagesPerBitmapEntry - 1 - PageOffset % PageRange::PagesPerBitmapEntry;
+
+                return true;
             }
+
             Current = Current->Next;
         }
-        KernelPanic("Invalid page address");
         return false;
+    }
+
+    bool PhysicalMemoryManager::IsPageUsed(PhysicalAddress Address)
+    {
+        PageRange* Range;
+        size_t BitmapEntryIndex;
+        uint32_t EntryBitIndex;
+        if (!GetPageAddressInBitmap(Address, Range, BitmapEntryIndex, EntryBitIndex))
+            KernelPanic("Could not find required page");
+        return ((Range->BitmapPtr[BitmapEntryIndex] & (1 << EntryBitIndex)) != 0);
     }
 
     void PhysicalMemoryManager::SetIsPageUsed(PhysicalAddress Address, bool IsUsed)
     {
-        PageRange* Current = s_FirstPageRange;
-        while (Current)
-        {
-            if (Current->Address <= Address && Current->Address + Current->Size >= Address)
-            {
-                const auto BitsPerSingleBitmapElement = sizeof(PageRange::BitmapEntryType) * 8;
+        PageRange* Range;
+        size_t BitmapEntryIndex;
+        uint32_t EntryBitIndex;
+        if (!GetPageAddressInBitmap(Address, Range, BitmapEntryIndex, EntryBitIndex))
+            KernelPanic("Could not find required page");
 
-                auto PageOffset = (Address - Current->Address) / PAGE_SIZE;
-                auto BitmapElementIndex = PageOffset / BitsPerSingleBitmapElement;
-                auto BitmapBitIndex = BitsPerSingleBitmapElement - 1 - PageOffset % BitsPerSingleBitmapElement;
-
-                if (IsUsed)
-                    Current->BitmapPtr[BitmapElementIndex] |= 1 << BitmapBitIndex;
-                else
-                    Current->BitmapPtr[BitmapElementIndex] &= ~(1 << BitmapBitIndex);
-
-                Current->PagesLeft--;
-                return;
-            }
-            Current = Current->Next;
-        }
-        KernelPanic("Invalid page address");
+        if (IsUsed)
+            Range->BitmapPtr[BitmapEntryIndex] |= 1 << EntryBitIndex;
+        else
+            Range->BitmapPtr[BitmapEntryIndex] &= ~(1 << EntryBitIndex);
     }
 
     PhysicalAddress PhysicalMemoryManager::AllocatePage()
@@ -124,6 +125,13 @@ namespace Kernel
             Current = Current->Next;
         }
         return 0;
+    }
+
+    void PhysicalMemoryManager::FreePage(PhysicalAddress Address)
+    {
+        ASSERT(Address % PAGE_SIZE == 0);
+        ASSERT(IsPageUsed(Address));
+        SetIsPageUsed(Address, false);
     }
 } // namespace Kernel
 
