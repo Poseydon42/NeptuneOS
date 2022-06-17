@@ -1,5 +1,5 @@
 #pragma once
 
-#ifdef SERENITY_AMD64
+#ifdef NEPTUNE_AMD64
 #include <Arch/amd64/CPU.h>
 #endif

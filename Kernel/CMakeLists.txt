@@ -13,10 +13,10 @@ set(CMAKE_ASM_NASM_COMPILE_OBJECT
 include(common_compiler_options)
 include(common_linker_options)
 add_link_options(-T ${CMAKE_CURRENT_SOURCE_DIR}/linker.ld)
-add_compile_definitions(SERENITY_KERNEL)
+add_compile_definitions(NEPTUNE_KERNEL)
 
 if(NEPTUNE_ARCH STREQUAL "amd64")
-	add_compile_definitions(SERENITY_AMD64)
+	add_compile_definitions(NEPTUNE_AMD64)
 endif()
 
 set(ASM_SOURCES
@@ -26,6 +26,7 @@ set(ASM_SOURCES
 
 set(CXX_SOURCES
 	Arch/amd64/CPU.cpp
+	Arch/amd64/IDT.cpp
 	Boot/Main.cpp
 	CompilerStubs.cpp
 	IO/Serial.cpp

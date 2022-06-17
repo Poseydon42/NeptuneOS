@@ -2,7 +2,7 @@
 
 #include <cstddef>
 
-#ifdef SERENITY_AMD64
+#ifdef NEPTUNE_AMD64
 #    include <Arch/amd64/Memory.h>
 #endif
 

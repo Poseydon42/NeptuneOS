@@ -1,6 +1,6 @@
 #include "CPU.h"
 
-#ifdef SERENITY_AMD64
+#ifdef NEPTUNE_AMD64
 
 extern "C" void WriteByteToPortImpl(uint16_t Port, uint8_t Value);
 extern "C" void WriteWordToPortImpl(uint16_t Port, uint16_t Value);
